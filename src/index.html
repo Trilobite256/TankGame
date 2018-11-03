@@ -10,6 +10,9 @@
     <link rel="stylesheet" type="text/css" href="index.css">
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="view/TankView.js"></script>
+    <script src="model/TankModel.js"></script>
+    <script src="controller/TankController.js"></script>
 </head>
 
 <body>
@@ -17,7 +20,12 @@
         <!-- Empty slot for player stats -->
     </div>
     <div id="gameSpace">
-    
+        <div id="player2">
+
+        </div>
+        <div id="player1">
+            <canvas id="player1tank" width="700" height="500"></canvas>
+        </div>
     </div>
 </body>
 
