@@ -17,6 +17,7 @@ function TankView(tankController) {
         angle: Math.random() * Math.PI * 2
     }
 
+    this.bullets = [];
     this.deltaX = 0;
 }
 
@@ -35,16 +36,16 @@ TankView.prototype = {
         $(document).keydown((event) => {
             switch (event.which) {
                 case 37: // left arrow key 
-                    console.log("left pressed");
-                    this.deltaX -= 2;
+                    if (this.turret.x + this.deltaX > 50) {
+                        this.deltaX -= 5;
+                    }
                     break;
-                case 39: // right arrow key 
-                    console.log("right pressed");
-                    this.deltaX += 2;
+                case 39: // right arrow key
+                    if (this.turret.x + this.deltaX < (window.innerWidth - 50)) {
+                        this.deltaX += 5;
+                    }
                     break;
             }
-
-            animate();
         });
 
         $("#gameSpace").click(() => {
@@ -52,8 +53,8 @@ TankView.prototype = {
         });
     },
 
-    resetCanvas: function() {
-        this.canvas.width = window.innerWidth * 0.80;
+    resetCanvas: function () {
+        this.canvas.width = window.innerWidth * 0.99;
         this.canvas.height = window.innerHeight * 0.80;
     },
 
@@ -89,14 +90,31 @@ TankView.prototype = {
         this.ctx.stroke();
     },
 
-    shootBullets: function() {
-        this.ctx.setTransform(1, 0, 0, 1, this.turret.x + this.deltaX, this.turret.y);
+    insideWindow(x, y) {
+        return x < this.canvas.width &&
+            y < this.canvas.height &&
+            x > 0 &&
+            y > 0;
+    },
 
-        this.ctx.rotate(this.turret.angle);
-        
-        this.ctx.beginPath()
-        this.ctx.arc(this.turret.x + this.deltaX, this.turret.y, this.turret.radius / 2, 0, Math.PI * 2);
-        this.ctx.closePath();
+    shootBullets: function () {
+        let angle = this.turret.angle;
+        let x = this.turret.x + angle;
+        let y = this.turret.y + angle;
 
+        let i = 0;
+        while (i < 200) {
+            x += angle;
+            y += angle;
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+            this.ctx.beginPath()
+            this.ctx.arc(x, y, this.turret.radius / 2, 0, Math.PI * 2);
+            this.ctx.closePath();
+            this.ctx.fill();
+
+
+            i++;
+        }
     }
 }
