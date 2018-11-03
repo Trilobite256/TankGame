@@ -1,12 +1,19 @@
 function TankView(tankController) {
     this.tankController = tankController;
 
-    this.canvas = document.getElementById("player1");
+    this.canvas = document.getElementById('player1tank');
     this.ctx = this.canvas.getContext('2d');
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+
+    this.tank = {
+        height: 75,
+        width: 40
+    }
 
     this.turret = {
-        x: 320,
-        y: 160,
+        x: this.tank.height / 2,
+        y: this.tank.width / 2,
         radius: 15,
         angle: Math.random() * Math.PI * 2
     }
@@ -14,11 +21,12 @@ function TankView(tankController) {
 
 TankView.prototype = {
 
-    init = () => {
-        this.addListeners()
+    init: function () {
+        this.addListeners();
+        this.renderTank();
     },
 
-    addListeners = () => {
+    addListeners: function () {
         const self = this;
 
         window.addEventListener('mousemove', (event) => {
@@ -26,18 +34,18 @@ TankView.prototype = {
         });
     },
 
-    renderGun = () => {
+    renderGun: function () {
         this.ctx.setTransform(1, 0, 0, 1, this.turret.x, this.turret.y);
 
-        this.ctx = ctx.rotate(this.turret.angle);
+        this.ctx.rotate(this.turret.angle);
 
         this.ctx.beginPath();
-        this.ctx.lineWidth = 2
+        this.ctx.lineWidth = 2;
         this.ctx.rect(0, 0, 60, 0);
         this.ctx.stroke();
     },
 
-    renderTurret = () => {
+    renderTurret: function () {
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -48,10 +56,14 @@ TankView.prototype = {
         this.ctx.lineWidth = 1;
         this.ctx.fill();
 
+        this.renderTank();
         this.renderGun();
     },
 
-    renderTank = () => {
-
+    renderTank: function () {
+        this.ctx.beginPath();
+        this.ctx.lineWidth = 2;
+        this.ctx.rect(0, 0, this.tank.height, this.tank.width);
+        this.ctx.stroke();
     }
 }

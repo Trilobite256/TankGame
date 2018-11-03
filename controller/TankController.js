@@ -4,17 +4,18 @@ function TankController() {
 
 TankController.prototype = {
 
-    calculateAngle = (mouseEvent) => {
+    calculateAngle: function(mouseEvent) {
         if (!mouseEvent) return;
-        let vx = e.clientX - this.tankView.turret.x;
-        let vy = e.clientY - this.tankView.turret.y;
-        tankView.turret.angle = Math.atan2(vy, vx);
+        let vx = mouseEvent.clientX - this.tankView.turret.x;
+        let vy = mouseEvent.clientY - this.tankView.turret.y;
+        this.tankView.turret.angle = Math.atan2(vy, vx);
     }
 
 }
 
 window.onload = function() {
-    let tankController = new Controller();
+    let tankController = new TankController();
+    tankController.tankView.init();
 
     function animate() {
         tankController.tankView.renderTurret();
