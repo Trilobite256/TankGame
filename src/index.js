@@ -18,12 +18,12 @@ class Turret extends React.Component {
 
     constructor(props) {
         super(props);
-        this.x = props.x;
-        this.y = props.y;
-        this.base_radius = props.base_radius;
-        this.angle = props.angle;
 
-        this.canvas = document.getElementById('game');
+        this.state = {
+            base_radius: props.base_radius
+        };
+
+        this.canvas =  this.createCanvas();
         this.ctx = this.canvas.getContext('2d');
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
@@ -32,8 +32,8 @@ class Turret extends React.Component {
     }
 
     createCanvas() {
-        let canvas = "<canvas id='game' width='700' height='500'></canvas>";
-        $("")
+        const canvas = "<canvas id='game' width='700' height='500'></canvas>";
+        return $('root').append(canvas);
     }
 
     binding() {
@@ -47,8 +47,8 @@ class Turret extends React.Component {
         if (!event) {
             return;
         }
-        let vx = event.clientX - this.x;
-        let vy = event.clientY - this.y;
+        let vx = event.clientX - this.props.x;
+        let vy = event.clientY - this.props.y;
         this.angle = Math.atan2(vy, vx);
     }
 
@@ -56,7 +56,7 @@ class Turret extends React.Component {
         const turret_length = 60;
         this.ctx.setTransform(1, 0, 0, 1, this.x, this.y);
 
-        this.rotate(this.angle);
+        this.rotate(this.props.angle);
 
         this.ctx.beginPath();
         this.ctx.lineWidth = turret_length;
@@ -64,14 +64,14 @@ class Turret extends React.Component {
     }
 
     render() {
-        const canvas_width = $("#game").width();
-        const canvas_height = $("#game").height();
+        const canvas_width = this.canvas.width;
+        const canvas_height = this.canvas.height;
 
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.ctx.clearRect(0, 0, canvas_width, canvas_height);
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         this.ctx.beginPath();
-        this.ctx.arc(this.x, this.y, this.base_radius, 0, Math.PI * 2);
+        this.ctx.arc(this.props.x, this.props.y, this.state.base_radius, 0, Math.PI * 2);
         this.ctx.closePath();
         this.ctx.strokeStyle = "#000000"
         this.ctx.lineWidth = 1;
