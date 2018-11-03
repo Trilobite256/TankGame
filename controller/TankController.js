@@ -6,7 +6,7 @@ TankController.prototype = {
 
     calculateAngle: function(mouseEvent) {
         if (!mouseEvent) return;
-        let vx = mouseEvent.clientX - this.tankView.turret.x;
+        let vx = mouseEvent.clientX - (this.tankView.turret.x + this.tankView.deltaX);
         let vy = mouseEvent.clientY - this.tankView.turret.y;
         this.tankView.turret.angle = Math.atan2(vy, vx);
     }
@@ -23,4 +23,8 @@ window.onload = function() {
     }
 
     animate();
+
+    window.onresize = () => {
+        tankController.tankView.resetCanvas();
+    }
 }
