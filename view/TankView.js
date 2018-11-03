@@ -23,7 +23,6 @@ TankView.prototype = {
 
     init: function () {
         this.addListeners();
-        this.renderTank();
     },
 
     addListeners: function () {
@@ -31,6 +30,21 @@ TankView.prototype = {
 
         window.addEventListener('mousemove', (event) => {
             this.tankController.calculateAngle(event);
+        });
+
+        $(document).keydown((event) => {
+            switch (event.which) {
+                case 37: // left arrow key 
+                    $("#player1tank").finish().animate({
+                        left: "-=5"
+                    });
+                    break;
+                case 39: // right arrow key 
+                    $("#player1tank").finish().animate({
+                        left: "+=5"
+                    });
+                    break;
+            }
         });
     },
 
