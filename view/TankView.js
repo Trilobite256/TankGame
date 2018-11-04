@@ -45,7 +45,7 @@ TankView.prototype = {
                     }
                     break;
                 case 39: // right arrow key
-                    if (this.turret.x + this.deltaX < (window.innerWidth - 50)) {
+                    if ((this.turret.x + this.deltaX) < (window.innerWidth - 50)) {
                         this.deltaX += 5;
                     }
                     break;
@@ -53,15 +53,7 @@ TankView.prototype = {
         });
 
         $("#gameSpace").click(() => {
-            this.shootBullets();
-            let angle = this.turret.angle;
-            let vx = this.mouseX - this.turret.x;
-            let vy = this.mouseY - this.turret.y;
-            let mouseDist = Math.sqrt(Math.sqrt(Math.abs(vx - (this.turret.x + this.deltaX)))
-                + Math.sqrt(Math.abs(vy - this.turret.y)));
-            let x = this.turret.x;
-            let y = this.turret.y;
-            this.createBullet(x, y, angle, mouseDist);
+            this.createBullet();
         });
     },
 
@@ -90,9 +82,6 @@ TankView.prototype = {
         this.ctx.closePath();
         this.ctx.strokeStyle = '#000000';
         this.ctx.fill();
-
-        this.renderTank();
-        this.renderGun();
     },
 
     renderTank: function () {
@@ -109,39 +98,49 @@ TankView.prototype = {
             y > 0;
     },
 
-    createBullet: function (x, y, angle, mdist) {
+    createBullet: function () {
+        let angle = this.turret.angle;
+        let vx = this.mouseX - (this.turret.x + this.deltaX);
+        let vy = this.mouseY - this.turret.y;
+        let mouseDist = Math.sqrt(Math.sqrt(Math.abs(vx - (this.turret.x + this.deltaX)))
+            + Math.sqrt(Math.abs(vy - this.turret.y)));
+        let x = this.turret.x + this.deltaX;
+        let y = this.turret.y;
+
         this.bullets.push({
             x: x,
             y: y,
-            mouseDist: mdist,
+            mouseDist: mouseDist,
             angle: angle
         });
     },
 
-    shootBullets: function () {
-        let angle = this.turret.angle;
-        let vx = this.mouseX - this.turret.x;
-        let vy = this.mouseY - this.turret.y;
-        let mouseDist = Math.sqrt(Math.sqrt(Math.abs(vx - (this.turret.x + this.deltaX)))
-            + Math.sqrt(Math.abs(vy - this.turret.y)));
-        let x = this.turret.x;
-        let y = this.turret.y;
-
-        // console.log(this.turret.x);
-        // console.log(this.turret.y);
-        // console.log(vx);
-        // console.log(vy);
-        // console.log(mouseDist);
-
-        while (this.insideWindow(x, y)) {
-            x += mouseDist * Math.cos(angle);
-            y += mouseDist * Math.sin(angle);
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
+    updateBulletsPosition: function(bullet, index) {
+    
+        if (this.insideWindow(bullet.x, bullet.y)) {
+            bullet.x += bullet.mouseDist * Math.cos(bullet.angle);
+            bullet.y += bullet.mouseDist * Math.sin(bullet.angle);
+    
             this.ctx.beginPath()
-            this.ctx.arc(x, y, this.turret.radius / 2, 0, Math.PI * 2);
+            this.ctx.arc(bullet.x, bullet.y, this.turret.radius / 2, 0, Math.PI * 2);
             this.ctx.closePath();
             this.ctx.fill();
+        } else {
+            this.bullets.splice(index, 1);
         }
+
+    }, 
+
+    draw: function() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.renderTurret();
+        this.renderTank();
+        
+        for (let i = 0; i < this.bullets.length; ++i) {
+            this.updateBulletsPosition(this.bullets[i], i);
+        }
+
+        this.renderGun();
     }
 }

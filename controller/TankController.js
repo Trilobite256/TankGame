@@ -19,7 +19,7 @@ window.onload = function() {
 
     function animate() {
         requestAnimationFrame(animate);
-        tankController.tankView.renderTurret();
+        tankController.tankView.draw();
     }
 
     animate();
