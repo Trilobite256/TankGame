@@ -13,7 +13,10 @@ $(function () {
         $('#playerName').val('');
     });
 
-    socket.on('player name', function (pname) {
-        $('#playerName1').append("" + pname);
+    socket.on('playernames', function (data) {
+        $('#playerName1').html("" + data[0]);
+        if (data[1]) {
+            $('#playerName2').html("" + data[1]);
+        }
     });
 });

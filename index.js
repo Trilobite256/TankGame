@@ -15,7 +15,7 @@ app.get('/', function (req, res) {
 });
 
 io.on('connection', function (socket) {
-  socket.on('player name', function(data, callback) {
+  socket.on('player name', function (data, callback) {
     if (playernames.length >= 2) {
       callback(false);
     } else {
@@ -24,6 +24,12 @@ io.on('connection', function (socket) {
       playernames.push(socket.playername);
       io.sockets.emit("playernames", playernames);
     }
+  });
+
+  socket.on('disconnect', function (data) {
+    if (!socket.playername) return;
+    playernames.splice(playernames.indexOf(socket.playername), 1);
+    io.sockets.emit("playernames", playernames);
   });
 });
 
