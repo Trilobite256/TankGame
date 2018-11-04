@@ -66,4 +66,7 @@ window.onload = function() {
     window.onresize = () => {
         tankController.tankView.resetCanvas();
     }
+
+    document.getElementById('modal-wrapper').style.display='block';
+
 }
