@@ -19,6 +19,8 @@ function TankView(tankController) {
 
     this.bullets = [];
     this.deltaX = 0;
+    this.mouseX = 0;
+    this.mouseY = 0;
 }
 
 TankView.prototype = {
@@ -31,6 +33,8 @@ TankView.prototype = {
 
         window.addEventListener('mousemove', (event) => {
             this.tankController.calculateAngle(event);
+            this.mouseX = event.clientX;
+            this.mouseY = event.clientY;
         });
 
         $(document).keydown((event) => {
@@ -50,6 +54,14 @@ TankView.prototype = {
 
         $("#gameSpace").click(() => {
             this.shootBullets();
+            let angle = this.turret.angle;
+            let vx = this.mouseX - this.turret.x;
+            let vy = this.mouseY - this.turret.y;
+            let mouseDist = Math.sqrt(Math.sqrt(Math.abs(vx - (this.turret.x + this.deltaX)))
+                + Math.sqrt(Math.abs(vy - this.turret.y)));
+            let x = this.turret.x;
+            let y = this.turret.y;
+            this.createBullet(x, y, angle, mouseDist);
         });
     },
 
@@ -97,24 +109,39 @@ TankView.prototype = {
             y > 0;
     },
 
+    createBullet: function (x, y, angle, mdist) {
+        this.bullets.push({
+            x: x,
+            y: y,
+            mouseDist: mdist,
+            angle: angle
+        });
+    },
+
     shootBullets: function () {
         let angle = this.turret.angle;
-        let x = this.turret.x + angle;
-        let y = this.turret.y + angle;
+        let vx = this.mouseX - this.turret.x;
+        let vy = this.mouseY - this.turret.y;
+        let mouseDist = Math.sqrt(Math.sqrt(Math.abs(vx - (this.turret.x + this.deltaX)))
+            + Math.sqrt(Math.abs(vy - this.turret.y)));
+        let x = this.turret.x;
+        let y = this.turret.y;
 
-        let i = 0;
-        while (i < 200) {
-            x += angle;
-            y += angle;
+        // console.log(this.turret.x);
+        // console.log(this.turret.y);
+        // console.log(vx);
+        // console.log(vy);
+        // console.log(mouseDist);
+
+        while (this.insideWindow(x, y)) {
+            x += mouseDist * Math.cos(angle);
+            y += mouseDist * Math.sin(angle);
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
             this.ctx.beginPath()
             this.ctx.arc(x, y, this.turret.radius / 2, 0, Math.PI * 2);
             this.ctx.closePath();
             this.ctx.fill();
-
-
-            i++;
         }
     }
 }
