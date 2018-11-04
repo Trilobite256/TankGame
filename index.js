@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var playernames = [];
 
 app.use('/view', express.static(__dirname + '/view'));
 app.use('/model', express.static(__dirname + '/model'));
@@ -14,10 +15,16 @@ app.get('/', function (req, res) {
 });
 
 io.on('connection', function (socket) {
-    console.log('a user connected');
-//   socket.on('chat message', function (msg) {
-//     io.emit('chat message', msg);
-//   })
+  socket.on('player name', function(data, callback) {
+    if (playernames.length >= 2) {
+      callback(false);
+    } else {
+      callback(true);
+      socket.playername = data;
+      playernames.push(socket.playername);
+      io.sockets.emit("playernames", playernames);
+    }
+  });
 });
 
 http.listen(3000, function () {

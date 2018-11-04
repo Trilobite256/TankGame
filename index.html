@@ -24,12 +24,12 @@
         </div>
         <div id="playerStats">
             <div id="player1">
-                <h5>Player 1: </h5>
-                <h5>Lives: </h5>
+                <h5>Player 1: <a id="playerName1"></a></h5>
+                <h5>Lives: 3</h5>
             </div>
             <div id="player2">
-                <h5>Player 2: </h5>
-                <h5>Lives: </h5>
+                <h5>Player 2: <a id="playerName2"></a></h5>
+                <h5>Lives: 3</h5>
             </div>
         </div>
     </div>
@@ -38,12 +38,13 @@
         <form class="modal-content animate" action="">
 
             <div class="imgcontainer">
-                <h2 style="text-align:center">Pick A Name</h2>
+                <h2>Pick A Name</h2>
+                <p id="errorMessage"></p>
             </div>
 
             <div class="container">
                 <input id="playerName" type="text" placeholder="Enter Name" name="uname">
-                <button>To Battle!</button>
+                <button id="battleBtn">To Battle!</button>
             </div>
 
         </form>

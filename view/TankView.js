@@ -38,7 +38,7 @@ TankView.prototype = {
                     break;
             }
         });
-
+        
         $("#gameSpace").click(() => {
             this.tankController.createBullet();
         });

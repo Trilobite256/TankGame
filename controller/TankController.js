@@ -54,6 +54,8 @@ TankController.prototype = {
 }
 
 window.onload = function() {
+    document.getElementById('modal-wrapper').style.display='block';
+
     let tankController = new TankController();
     tankController.tankView.init();
 
@@ -67,7 +69,4 @@ window.onload = function() {
     window.onresize = () => {
         tankController.tankView.resetCanvas();
     }
-
-    document.getElementById('modal-wrapper').style.display='none';
-
 }
