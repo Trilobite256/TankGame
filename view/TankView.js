@@ -74,7 +74,10 @@ TankView.prototype = {
     renderTank: function () {
         this.ctx.beginPath();
         this.ctx.lineWidth = 2;
-        this.ctx.rect(0 + this.deltaX, 0, this.tankModel.tank.height, this.tankModel.tank.width);
+        this.ctx.rect(this.tankModel.tank.x + this.deltaX, 
+                      this.tankModel.tank.y, 
+                      this.tankModel.tank.height, 
+                      this.tankModel.tank.width);
         this.ctx.stroke();
     },
 
@@ -93,7 +96,7 @@ TankView.prototype = {
             bullet.y += bullet.mouseDist * Math.sin(bullet.angle);
     
             this.ctx.beginPath()
-            this.ctx.arc(bullet.x, bullet.y, this.tankModel.turret.radius / 2, 0, Math.PI * 2);
+            this.ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
             this.ctx.closePath();
             this.ctx.fill();
         } else {
@@ -110,6 +113,9 @@ TankView.prototype = {
 
         for (let i = 0; i < this.tankModel.bullets.length; ++i) {
             this.updateBulletsPosition(this.tankModel.bullets[i], i);
+            if (this.tankController.tankBulletCollision(this.tankModel.bullets[i], this.tankModel.tank)) {
+                alert("hit");
+            }
         }
 
         this.renderGun();

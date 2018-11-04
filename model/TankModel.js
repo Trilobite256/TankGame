@@ -1,5 +1,7 @@
 function TankModel() {
     this.tank = {
+        x: 0,
+        y: 0,
         height: 75,
         width: 40
     }
@@ -20,6 +22,7 @@ TankModel.prototype = {
         this.bullets.push({
             x: x,
             y: y,
+            radius: this.turret.radius / 2,
             mouseDist: mouseDist,
             angle: angle
         });

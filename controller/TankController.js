@@ -26,6 +26,28 @@ TankController.prototype = {
         let x = this.tankModel.turret.x + this.tankView.deltaX;
         let y = this.tankModel.turret.y;
         this.tankModel.addBullets(x, y, mouseDist, angle);
+    },
+
+    tankBulletCollision: function(bullet, tank) {
+        var distX = Math.abs(bullet.x - tank.x - tank.width / 2);
+        var distY = Math.abs(bullet.x - tank.y - tank.width / 2);
+
+        if (distX > (tank.width / 2 + bullet.radius)) {
+            return false;
+        }
+        if (distY > (tank.height / 2 + bullet.radius)) {
+            return false;
+        }
+        if (distX <= (tank.width / 2)) {
+            return true;
+        }
+        if (distY <= (tank.height / 2)) {
+            return true;
+        }
+
+        var dx = distX - tank.width / 2;
+        var dy = distY - tank.height / 2;
+        return (dx * dx + dy * dy <= (bullet.radius * bullet.radius));
     }
 
 }
