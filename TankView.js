@@ -114,7 +114,7 @@ TankView.prototype = {
         for (let i = 0; i < this.tankModel.bullets.length; ++i) {
             this.updateBulletsPosition(this.tankModel.bullets[i], i);
             if (this.tankController.tankBulletCollision(this.tankModel.bullets[i], this.tankModel.tank)) {
-                // alert("hit");
+                alert("hit");
             }
         }
 
