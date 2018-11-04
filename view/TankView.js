@@ -2,7 +2,7 @@ function TankView(tankController, tankModel) {
     this.tankController = tankController;
     this.tankModel = tankModel;
 
-    this.canvas = document.getElementById('player1tank');
+    this.canvas = document.getElementById('canvas');
     this.ctx = this.canvas.getContext('2d');
     this.resetCanvas();
     this.deltaX = 0;

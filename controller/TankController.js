@@ -29,6 +29,7 @@ TankController.prototype = {
     },
 
     tankBulletCollision: function(bullet, tank) {
+        if (!bullet) return;
         var distX = Math.abs(bullet.x - tank.x - tank.width / 2);
         var distY = Math.abs(bullet.x - tank.y - tank.width / 2);
 
@@ -67,6 +68,6 @@ window.onload = function() {
         tankController.tankView.resetCanvas();
     }
 
-    document.getElementById('modal-wrapper').style.display='block';
+    document.getElementById('modal-wrapper').style.display='none';
 
 }

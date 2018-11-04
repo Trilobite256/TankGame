@@ -20,24 +20,32 @@
 <body>
     <div id="game">
         <div id="gameSpace">
-            <canvas id="player1tank" width="300" height="200"></canvas>
+            <canvas id="canvas" width="300" height="200"></canvas>
         </div>
         <div id="playerStats">
-            <!-- Empty slot for player stats -->
+            <div id="player1">
+                <h5>Player 1: </h5>
+                <h5>Lives: </h5>
+            </div>
+            <div id="player2">
+                <h5>Player 2: </h5>
+                <h5>Lives: </h5>
+            </div>
         </div>
     </div>
 
     <div id="modal-wrapper" class="modal">
-        <form class="modal-content animate">
+        <form class="modal-content animate" action="">
 
             <div class="imgcontainer">
                 <h2 style="text-align:center">Pick A Name</h2>
             </div>
 
             <div class="container">
-                <input type="text" placeholder="Enter Username" name="uname">
+                <input id="playerName" type="text" placeholder="Enter Name" name="uname">
                 <button>To Battle!</button>
             </div>
+
         </form>
     </div>
 </body>
