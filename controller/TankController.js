@@ -30,31 +30,18 @@ TankController.prototype = {
 
     tankBulletCollision: function(bullet, tank) {
         if (!bullet) return;
-        var distX = Math.abs(bullet.x - tank.x - tank.width / 2);
-        var distY = Math.abs(bullet.x - tank.y - tank.width / 2);
-
-        if (distX > (tank.width / 2 + bullet.radius)) {
-            return false;
-        }
-        if (distY > (tank.height / 2 + bullet.radius)) {
-            return false;
-        }
-        if (distX <= (tank.width / 2)) {
-            return true;
-        }
-        if (distY <= (tank.height / 2)) {
-            return true;
-        }
-
-        var dx = distX - tank.width / 2;
-        var dy = distY - tank.height / 2;
-        return (dx * dx + dy * dy <= (bullet.radius * bullet.radius));
+        
+        let check1 = bullet.x < (tank.x + (tank.width * 2));
+        let check2 = bullet.x > tank.x; 
+        let check3 = bullet.y < (tank.y + (tank.height * 2));
+        let check4 = bullet.y > tank.y
+        return check1 && check2 && check3 && check4;
     }
 
 }
 
 window.onload = function() {
-    document.getElementById('modal-wrapper').style.display='block';
+    // document.getElementById('modal-wrapper').style.display='block';
 
     let tankController = new TankController();
     tankController.tankView.init();

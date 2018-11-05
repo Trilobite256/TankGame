@@ -23,7 +23,7 @@
     width: 50%;
     height: 100%;
     border-style: solid;
-    border-width: 3px;
+    border-width: 1px;
     background-color: #0D7AFF;
     float: left;
 }
@@ -32,7 +32,7 @@
     width: 50%;
     height: 100%;
     border-style: solid;
-    border-width: 3px;
+    border-width: 1px;
     background-color: #FF0000;
     float: left;
 }
