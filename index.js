@@ -3,6 +3,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var playernames = [];
+var tanks = [];
 
 app.use('/view', express.static(__dirname + '/view'));
 app.use('/model', express.static(__dirname + '/model'));
@@ -26,19 +27,47 @@ io.on('connection', function (socket) {
     }
   });
 
-  socket.on('pressed', function(key) {
-    if (key === 37) {
-      
+  socket.on('new tank', function (tank) {
+    if (!socket.tank) {
+      socket.tank = tank;
     }
-    if (key === 38) {
+    tanks.push(tank);
+    io.sockets.emit("tanks", tank);
+  });
 
+  socket.on('pressed', (key, width) => {
+    if (key === 37) {
+      if (socket.tank.turret.x + socket.tank.deltaX > 50) {
+        socket.tank.deltaX -= 5;
+        socket.emit('playermoving', tanks);
+        socket.broadcast.emit('playermoving', tanks);
+      }
     }
+
+    if (key === 39) {
+      if ((socket.tank.x + socket.tank.deltaX) < (width - 85)) {
+        socket.tank.deltaX += 5;
+        socket.emit('playermoving', tanks);
+        socket.broadcast.emit('playermoving', tanks);
+      }
+    }
+
+  });
+
+  socket.on('mousemoved', (data) => {
+    socket.emit('mousemoving', data);
+    socket.broadcast.emit('mousemoving', data);
+  });
+
+  socket.on('clicked', (data) => {
+    socket.emit('mouseclicked', socket.tank);
   });
 
   socket.on('disconnect', function (data) {
-    if (!socket.playername) return;
+    if (!socket.playername || !socket.tank) return;
     playernames.splice(playernames.indexOf(socket.playername), 1);
-    io.sockets.emit("playernames", playernames);
+    tanks.splice(tanks.indexOf(socket.tank), 1);
+    io.sockets.emit("playerleft", playernames, socket.tank);
   });
 });
 

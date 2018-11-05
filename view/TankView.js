@@ -1,11 +1,11 @@
-function TankView(tankController, tankModel) {
+function TankView(tankController) {
     this.tankController = tankController;
-    this.tankModel = tankModel;
+    this.socket = 0;
 
     this.canvas = document.getElementById('canvas');
     this.resetCanvas();
-    this.clientTank = new Tank(this.canvas, 0, 0, 75, 40, "red", true);
-    this.opponentTank = new Tank(this.canvas, 0, this.canvas.height - 41, 75, 40, "green", false);
+    this.tanks = [];
+    this.keys = {};
 
     // this.canvas = document.getElementById('canvas');
     this.ctx = this.canvas.getContext('2d');
@@ -20,30 +20,30 @@ TankView.prototype = {
 
     addListeners: function () {
 
-        window.addEventListener('mousemove', (event) => {
-            this.clientTank.calculateAngle(event);
-            this.opponentTank.calculateAngle(event);
-        });
+        window.addEventListener('keydown', (event) => {
+            this.keys[event.keyCode] = true; 
+        }, false);
+        
+        //check if key is not being pressed or has lifted up
+        window.addEventListener('keyup', (event) => {
+            delete this.keys[event.keyCode];
+        }, false);
 
-        $(document).keydown((event) => {
-            switch (event.which) {
-                case 37: // left arrow key 
-                    if (this.clientTank.turret.x + this.clientTank.deltaX > 50) {
-                        this.clientTank.deltaX -= 5;
-                    }
-                    break;
-                case 39: // right arrow key
-                    if ((this.clientTank.turret.x + this.deltaX) < (window.innerWidth - 50)) {
-                        this.clientTank.deltaX += 5;
-                    }
-                    break;
-            }
-        });
+    },
 
-        $("#gameSpace").click(() => {
-            this.clientTank.createBullet();
-            this.opponentTank.createBullet();
-        });
+    addNewTank: function(tank) {
+        this.tanks.push(tank);
+    },
+
+    updateTanks: function(tanks) {
+        this.tanks = [];
+        for (let i = 0; i < tanks.length; i++) {
+            this.tanks[i] = tanks[i];
+        }
+    },
+
+    deleteTank: function(tank) {
+        this.tanks.splice(tanks.indexOf(tank), 1);
     },
 
     resetCanvas: function () {
@@ -54,24 +54,21 @@ TankView.prototype = {
     draw: function () {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
-        this.clientTank.render();
-        this.opponentTank.render();
+        for (let i = 0, k = this.tanks.length - 1; i < this.tanks.length; ++i, k--) {
+            this.tanks[i].renderTurret();
+            this.tanks[i].renderTank();
 
-        this.clientTank.renderTurret();
-        this.opponentTank.renderTurret();
-        this.clientTank.renderTank();
-        this.opponentTank.renderTank()
+            for (let j = 0; j < this.tanks[i].bullets.length; ++j) {
+                this.tanks[i].updateBulletsPos(this.tanks[i].bullets[j], j);
+                if (this.tanks.length >= 2 &&
+                    this.tankController.tankBulletCollision(this.tanks[i].bullets[j], this.tanks[k])) {
 
-        for (let i = 0; i < this.clientTank.bullets.length; ++i) {
-            this.clientTank.updateBulletsPos(this.clientTank.bullets[i], i);
-            if (this.tankController.tankBulletCollision(this.clientTank.bullets[i], this.opponentTank)) {
-                this.clientTank.bullets.splice(i, 1);
-                
+                    this.clientTank.bullets.splice(j, 1);
+                }
             }
-        }
 
-        this.clientTank.renderGun();
-        this.opponentTank.renderGun();
+            this.tanks[i].renderGun();
+        }
     }
 }
 
@@ -102,13 +99,10 @@ class Tank {
         this.bullets = [];
     }
 
-    calculateAngle(mouseEvent) {
-        if (!mouseEvent) return;
-        let vx = mouseEvent.clientX - (this.turret.x + this.deltaX);
-        let vy = mouseEvent.clientY - this.turret.y;
+    calculateAngle() {
+        let vx = this.mouseX - (this.turret.x + this.deltaX);
+        let vy = this.mouseY - this.turret.y;
         this.turret.angle = Math.atan2(vy, vx);
-        this.mouseX = mouseEvent.clientX;
-        this.mouseY = mouseEvent.clientY;
     }
 
     updateBulletsPos(bullet, index) {
