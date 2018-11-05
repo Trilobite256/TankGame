@@ -65,7 +65,8 @@ TankView.prototype = {
         for (let i = 0; i < this.clientTank.bullets.length; ++i) {
             this.clientTank.updateBulletsPos(this.clientTank.bullets[i], i);
             if (this.tankController.tankBulletCollision(this.clientTank.bullets[i], this.opponentTank)) {
-                console.log("hit");
+                this.clientTank.bullets.splice(i, 1);
+                
             }
         }
 
@@ -89,6 +90,7 @@ class Tank {
         this.mouseY = 0;
 
         this.clientTank = ctank;
+        this.lives = 3;
 
         this.turret = {
             x: (this.height / 2) + this.x,

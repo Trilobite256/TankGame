@@ -5,29 +5,6 @@ function TankController() {
 
 TankController.prototype = {
 
-    calculateAngle: function(mouseEvent) {
-        if (!mouseEvent) return;
-        let vx = mouseEvent.clientX - (this.tankModel.turret.x + this.tankView.deltaX);
-        let vy = mouseEvent.clientY - this.tankModel.turret.y;
-        this.tankModel.turret.angle = Math.atan2(vy, vx);
-    },
-
-    createBullet: function () {
-        let angle = this.tankModel.turret.angle;
-        let vx = this.tankView.mouseX - (this.tankModel.turret.x + this.tankView.deltaX);
-        let vy = this.tankView.mouseY - this.tankModel.turret.y;
-        let mouseDist = Math.sqrt(
-                            Math.sqrt(
-                               Math.abs(vx - (this.tankModel.turret.x + this.tankView.deltaX)))
-                            + Math.sqrt(
-                                Math.abs(vy - this.tankModel.turret.y)
-                            )
-                        );
-        let x = this.tankModel.turret.x + this.tankView.deltaX;
-        let y = this.tankModel.turret.y;
-        this.tankModel.addBullets(x, y, mouseDist, angle);
-    },
-
     tankBulletCollision: function(bullet, tank) {
         if (!bullet) return;
         

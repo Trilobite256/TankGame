@@ -26,6 +26,15 @@ io.on('connection', function (socket) {
     }
   });
 
+  socket.on('pressed', function(key) {
+    if (key === 37) {
+      
+    }
+    if (key === 38) {
+
+    }
+  });
+
   socket.on('disconnect', function (data) {
     if (!socket.playername) return;
     playernames.splice(playernames.indexOf(socket.playername), 1);
