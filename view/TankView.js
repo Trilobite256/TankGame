@@ -35,13 +35,6 @@ TankView.prototype = {
         this.tanks.push(tank);
     },
 
-    updateTanks: function(tanks) {
-        this.tanks = [];
-        for (let i = 0; i < tanks.length; i++) {
-            this.tanks[i] = tanks[i];
-        }
-    },
-
     deleteTank: function(tank) {
         this.tanks.splice(tanks.indexOf(tank), 1);
     },
@@ -168,7 +161,7 @@ class Tank {
     renderTurret() {
         this.ctx.setTransform(1, 0, 0, 1, 0, 0);
         if (this.clientTank) {
-            this.ctx.clearRect(0, this.y, this.canvas.width, this.canvas.height);
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         } else {
             this.ctx.clearRect(0, this.y + 41, this.canvas.width, this.canvas.height);
         }

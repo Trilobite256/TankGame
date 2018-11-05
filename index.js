@@ -16,6 +16,9 @@ app.get('/', function (req, res) {
 });
 
 io.on('connection', function (socket) {
+
+  io.sockets.emit("playerjoined", tanks);
+
   socket.on('player name', function (data, callback) {
     if (playernames.length >= 2) {
       callback(false);
@@ -24,6 +27,7 @@ io.on('connection', function (socket) {
       socket.playername = data;
       playernames.push(socket.playername);
       io.sockets.emit("playernames", playernames);
+      io.sockets.emit("tanks", tanks);
     }
   });
 
@@ -32,23 +36,23 @@ io.on('connection', function (socket) {
       socket.tank = tank;
     }
     tanks.push(tank);
-    io.sockets.emit("tanks", tank);
+    console.log(tanks);
   });
 
   socket.on('pressed', (key, width) => {
     if (key === 37) {
       if (socket.tank.turret.x + socket.tank.deltaX > 50) {
         socket.tank.deltaX -= 5;
-        socket.emit('playermoving', tanks);
-        socket.broadcast.emit('playermoving', tanks);
+        socket.emit('playermoving', socket.tank);
+        socket.broadcast.emit('playermoving', socket.tank);
       }
     }
 
     if (key === 39) {
       if ((socket.tank.x + socket.tank.deltaX) < (width - 85)) {
         socket.tank.deltaX += 5;
-        socket.emit('playermoving', tanks);
-        socket.broadcast.emit('playermoving', tanks);
+        socket.emit('playermoving', socket.tank);
+        socket.broadcast.emit('playermoving', socket.tank);
       }
     }
 
@@ -61,6 +65,7 @@ io.on('connection', function (socket) {
 
   socket.on('clicked', (data) => {
     socket.emit('mouseclicked', socket.tank);
+    socket.broadcast.emit('mouseclicked', socket.tank);
   });
 
   socket.on('disconnect', function (data) {

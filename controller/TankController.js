@@ -66,14 +66,33 @@ $(function() {
         $('#playerName1').html("" + data[0]);
         if (data[1]) {
             $('#playerName2').html("" + data[1]);
+        } 
+    });
+
+    socket.on('tanks', (data) => {
+        if (data.length == 0) {   
+            let player1Tank = new Tank(tankController.tankView.canvas, 0, 0, 75, 40, "red", true);
+            tankController.tankView.addNewTank(player1Tank);
+            socket.emit('new tank', player1Tank); 
+        } else if (data.length == 1) {
             let player2Tank = new Tank(tankController.tankView.canvas, 0, canvas.height - 41, 75, 40, "green", false);
             tankController.tankView.addNewTank(player2Tank);
             socket.emit('new tank', player2Tank);
-        } else {
-            let player1Tank = new Tank(tankController.tankView.canvas, 0, 0, 75, 40, "red", true);
-            tankController.tankView.addNewTank(player1Tank);
-            socket.emit('new tank', player1Tank);
         }
+    });
+
+    socket.on('playerjoined', function(data) {
+
+        tankController.tankView.tanks = [];
+        for (let i = 0; i < data.length; i++) {
+            let playerTank = new Tank(tankController.tankView.canvas, data[i].x, 
+                                      data[i].y, data[i].height, data[i].width, 
+                                      data[i].color, data[i].ctank);
+            tankController.tankView.tanks.push(playerTank);
+        }
+
+        tankController.tankView.draw();
+
     });
 
     socket.on('playerleft', function(data, tank) {
@@ -84,15 +103,24 @@ $(function() {
             $('#playerName2').html("");
         }
 
-        tankController.tankView.deleteTank(tank);
+        tankToDelete = 0;
+        for (let i = 0; i < tankController.tankView.tanks.length; ++i) {
+            if (tankController.tankView.tanks[i].y == tank.y) {
+                tankToDelete = tankController.tankView.tanks[i];
+            }
+        }
+
+        tankController.tankView.deleteTank(tankToDelete);
 
         tankController.tankView.draw();
     });
 
     socket.on('playermoving', function(data) {
 
-        for(let i = 0; i < data.length; ++i) {
-            tankController.tankView.tanks[i].deltaX = data[i].deltaX;
+        for (let i = 0; i < tankController.tankView.tanks.length; ++i) {
+            if (tankController.tankView.tanks[i].y == data.y) {
+                tankController.tankView.tanks[i].deltaX = data.deltaX;
+            }
         }
 
     });
