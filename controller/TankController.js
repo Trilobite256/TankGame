@@ -46,11 +46,10 @@ $(function () {
         // if (tankController.tankView.tanks.length >= 2) {
         //     socket.emit('lives', tankController.tankView.tanks);
         // }
+
         tankController.tankView.draw();
         requestAnimationFrame(animate);
     }
-
-    animate();
 
     $('form').submit(function (event) {
         event.preventDefault();
@@ -62,6 +61,7 @@ $(function () {
             }
         });
         $('#playerName').val('');
+        animate();
     });
 
     socket.on('playernames', function (data) {
@@ -74,10 +74,14 @@ $(function () {
     });
 
     socket.on('lives', function (data) {
-        $('#playerLives1').html("" + data[0].lives);
-        $('#playerLives2').html("" + data[1].lives);
+        if (data[0]) {
+            $('#playerLives1').html("" + data[0].lives);
+        }
+        if (data[1]) {
+            $('#playerLives2').html("" + data[1].lives);
+        }
 
-        if (data[1].lives == 0) {
+        if (data[1] && data[1].lives == 0) {
             $('#player1winner').html("winner");
         }
 
@@ -153,12 +157,6 @@ $(function () {
     });
 
     socket.on('mousemoving', (data, tank) => {
-
-        // for (let i = 0; i < tankController.tankView.tanks.length; ++i) {
-        //     tankController.tankView.tanks[i].mouseX = data.x;
-        //     tankController.tankView.tanks[i].mouseY = data.y;
-        //     tankController.tankView.tanks[i].calculateAngle();
-        // }
 
         for (let i = 0; i < tankController.tankView.tanks.length; ++i) {
             if (tankController.tankView.tanks[i].y == tank.y) {

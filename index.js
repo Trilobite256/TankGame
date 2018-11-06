@@ -63,8 +63,13 @@ io.on('connection', function (socket) {
   });
 
   socket.on('lives', (data) => {
-    tanks[0].lives = data[0].lives;
-    tanks[1].lives = data[1].lives;
+    if (data[0]) { 
+      tanks[0].lives = data[0].lives;
+    }
+    if (data[1]) {
+      console.log(data[1]);
+      tanks[1].lives = data[1].lives;
+    }
     socket.emit('lives', tanks);
     socket.broadcast.emit('lives', tanks);
   }); 

@@ -31,15 +31,15 @@ TankView.prototype = {
 
     },
 
-    sortTanks: function() {
+    sortTanks: function () {
         if (this.tanks.length == 0 || this.tanks.length == 1) return;
-        
+
         if (this.tanks[0].color == "green") {
             temp = this.tanks[0];
             this.tanks[0] = this.tanks[1];
             this.tanks[1] = temp;
         }
-    }, 
+    },
 
     addNewTank: function (tank) {
         this.tanks.push(tank);
@@ -66,11 +66,11 @@ TankView.prototype = {
                 this.tanks[i].updateBulletsPos(this.tanks[i].bullets[j], j);
                 if (this.tanks.length >= 2 &&
                     this.tankController.tankBulletCollision(this.tanks[i].bullets[j], this.tanks[k])) {
-                    
-                        this.tanks[i].bullets.splice(j, 1);
-                        if (this.tanks[k].lives > 0) {
-                            this.tanks[k].lives--;
-                        }
+
+                    this.tanks[i].bullets.splice(j, 1);
+                    if (this.tanks[k].lives > 0) {
+                        this.tanks[k].lives--;
+                    }
 
                 }
             }
