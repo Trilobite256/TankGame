@@ -58,15 +58,13 @@ io.on('connection', function (socket) {
   });
 
   socket.on('mousemoved', (data) => {
-    socket.emit('mousemoving', data);
-    socket.broadcast.emit('mousemoving', data);
+    socket.emit('mousemoving', data, socket.tank);
+    socket.broadcast.emit('mousemoving', data, socket.tank);
   });
 
   socket.on('lives', (data) => {
     tanks[0].lives = data[0].lives;
-    if (data[1]) {
-      tanks[1].lives = data[1].lives;
-    }
+    tanks[1].lives = data[1].lives;
     socket.emit('lives', tanks);
     socket.broadcast.emit('lives', tanks);
   }); 
