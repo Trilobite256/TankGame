@@ -9,7 +9,6 @@ app.use('/view', express.static(__dirname + '/view'));
 app.use('/model', express.static(__dirname + '/model'));
 app.use('/controller', express.static(__dirname + '/controller'));
 app.use('/css', express.static(__dirname + '/css'));
-app.use('/socket', express.static(__dirname + '/socket'));
 
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
@@ -31,15 +30,15 @@ io.on('connection', function (socket) {
     }
   });
 
-  socket.on('new tank', function (tank) {
+  socket.on('new tank', function (tank, callback) {
     if (!socket.tank) {
       socket.tank = tank;
+      tanks.push(socket.tank);
     }
-    tanks.push(tank);
-    console.log(tanks);
   });
 
   socket.on('pressed', (key, width) => {
+
     if (key === 37) {
       if (socket.tank.turret.x + socket.tank.deltaX > 50) {
         socket.tank.deltaX -= 5;
@@ -72,7 +71,7 @@ io.on('connection', function (socket) {
     if (!socket.playername || !socket.tank) return;
     playernames.splice(playernames.indexOf(socket.playername), 1);
     tanks.splice(tanks.indexOf(socket.tank), 1);
-    io.sockets.emit("playerleft", playernames, socket.tank);
+    socket.broadcast.emit("playerleft", playernames, socket.tank);
   });
 });
 

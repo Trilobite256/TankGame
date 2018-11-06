@@ -21,9 +21,9 @@ TankView.prototype = {
     addListeners: function () {
 
         window.addEventListener('keydown', (event) => {
-            this.keys[event.keyCode] = true; 
+            this.keys[event.keyCode] = true;
         }, false);
-        
+
         //check if key is not being pressed or has lifted up
         window.addEventListener('keyup', (event) => {
             delete this.keys[event.keyCode];
@@ -31,12 +31,22 @@ TankView.prototype = {
 
     },
 
-    addNewTank: function(tank) {
+    sortTanks: function() {
+        if (this.tanks.length == 0 || this.tanks.length == 1) return;
+        
+        if (this.tanks[0].color == "green") {
+            temp = this.tanks[0];
+            this.tanks[0] = this.tanks[1];
+            this.tanks[1] = temp;
+        }
+    }, 
+
+    addNewTank: function (tank) {
         this.tanks.push(tank);
     },
 
-    deleteTank: function(tank) {
-        this.tanks.splice(tanks.indexOf(tank), 1);
+    deleteTank: function (tank) {
+        this.tanks.splice(this.tanks.indexOf(tank), 1);
     },
 
     resetCanvas: function () {
@@ -45,8 +55,9 @@ TankView.prototype = {
     },
 
     draw: function () {
+        this.sortTanks();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
+
         for (let i = 0, k = this.tanks.length - 1; i < this.tanks.length; ++i, k--) {
             this.tanks[i].renderTurret();
             this.tanks[i].renderTank();
@@ -55,8 +66,10 @@ TankView.prototype = {
                 this.tanks[i].updateBulletsPos(this.tanks[i].bullets[j], j);
                 if (this.tanks.length >= 2 &&
                     this.tankController.tankBulletCollision(this.tanks[i].bullets[j], this.tanks[k])) {
+                    
+                        this.tanks[i].bullets.splice(j, 1);
+                        this.tanks[k].lives--;
 
-                    this.clientTank.bullets.splice(j, 1);
                 }
             }
 
@@ -182,19 +195,5 @@ class Tank {
             this.height,
             this.width);
         this.ctx.stroke();
-    }
-
-    render() {
-        this.renderTurret();
-        this.renderTank();
-
-        for (let i = 0; i < this.bullets.length; ++i) {
-            this.updateBulletsPos(this.bullets[i], i);
-            // if (this.tankController.tankBulletCollision(this.tankModel.bullets[i], this.tankModel.tank)) {
-            //     // alert("hit");
-            // }
-        }
-
-        this.renderGun();
     }
 } 
