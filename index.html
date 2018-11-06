@@ -14,6 +14,7 @@
     <script src="view/TankView.js"></script>
     <script src="model/TankModel.js"></script>
     <script src="controller/TankController.js"></script>
+    <script src="view/strings.js"></script>
 </head>
 
 <body>
@@ -23,13 +24,13 @@
         </div>
         <div id="playerStats">
             <div id="player1">
-                <h5>Player 1: <a id="playerName1"></a></h5>
-                <h5>Lives: <a id="playerLives1"></a></h5>
+                <h5 id="player1heading"><a id="playerName1"></a></h5>
+                <h5 class="livesheading"><a id="playerLives1"></a></h5>
                 <h5><a id="player1winner"></a></h5>
             </div>
             <div id="player2">
-                <h5>Player 2: <a id="playerName2"></a></h5>
-                <h5>Lives: <a id="playerLives2"></a></h5>
+                <h5 id="player2heading"><a id="playerName2"></a></h5>
+                <h5 class="livesheading"><a id="playerLives2"></a></h5>
                 <h5><a id="player2winner"></a></h5>
             </div>
         </div>
@@ -39,13 +40,13 @@
         <form class="modal-content animate" action="">
 
             <div class="imgcontainer">
-                <h2>Pick A Name</h2>
+                <h2 id="pickname"></h2>
                 <p id="errorMessage"></p>
             </div>
 
             <div class="container">
                 <input id="playerName" type="text" placeholder="Enter Name" name="uname">
-                <button id="battleBtn">To Battle!</button>
+                <button id="battleBtn"></button>
             </div>
 
         </form>

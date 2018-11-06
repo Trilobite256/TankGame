@@ -16,13 +16,14 @@ app.get('/', function (req, res) {
 
 io.on('connection', function (socket) {
 
-  io.sockets.emit("playerjoined", tanks);
+  // io.emit("playerjoined", tanks);
 
-  socket.on('player name', function (data, callback) {
+  socket.on('player name', (data, callback) => {
     if (playernames.length >= 2) {
       callback(false);
     } else {
       callback(true);
+      io.emit("playerjoined", tanks);
       socket.playername = data;
       playernames.push(socket.playername);
       io.sockets.emit("playernames", playernames);
@@ -30,7 +31,7 @@ io.on('connection', function (socket) {
     }
   });
 
-  socket.on('new tank', function (tank, callback) {
+  socket.on('new tank', (tank) => {
     if (!socket.tank) {
       socket.tank = tank;
       tanks.push(socket.tank);
@@ -79,7 +80,7 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('mouseclicked', socket.tank);
   });
 
-  socket.on('disconnect', function (data) {
+  socket.on('disconnect', (data) => {
     if (!socket.playername || !socket.tank) return;
     playernames.splice(playernames.indexOf(socket.playername), 1);
     tanks.splice(tanks.indexOf(socket.tank), 1);
@@ -87,6 +88,6 @@ io.on('connection', function (socket) {
   });
 });
 
-http.listen(3000, function () {
+http.listen(3000, () => {
   console.log('listening on *:3000');
 });

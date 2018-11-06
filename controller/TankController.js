@@ -4,7 +4,7 @@ function TankController() {
 
 TankController.prototype = {
 
-    tankBulletCollision: function (bullet, tank) {
+    tankBulletCollision: (bullet, tank) => {
         if (!bullet || !tank) return false;
 
         let check1 = bullet.x < ((tank.x + tank.deltaX) + (tank.width * 2));
@@ -51,7 +51,7 @@ $(function () {
         requestAnimationFrame(animate);
     }
 
-    $('form').submit(function (event) {
+    $('form').submit((event) => {
         event.preventDefault();
         socket.emit('player name', $('#playerName').val(), function (data) {
             if (data) {
@@ -64,7 +64,7 @@ $(function () {
         animate();
     });
 
-    socket.on('playernames', function (data) {
+    socket.on('playernames', (data) => {
         if (data[0]) {
             $('#playerName1').html("" + data[0]);
         }
@@ -112,8 +112,8 @@ $(function () {
         }
     });
 
-    socket.on('playerjoined', function (data) {
-
+    socket.on('playerjoined', (data) => {
+        
         tankController.tankView.tanks = [];
         for (let i = 0; i < data.length; i++) {
             let playerTank = new Tank(tankController.tankView.canvas, data[i].x,
@@ -126,7 +126,7 @@ $(function () {
 
     });
 
-    socket.on('playerleft', function (data, tank) {
+    socket.on('playerleft', (data, tank) => {
         $('#playerName1').html("" + data[0]);
         if (data[1]) {
             $('#playerName2').html("" + data[1]);
@@ -146,7 +146,7 @@ $(function () {
         tankController.tankView.draw();
     });
 
-    socket.on('playermoving', function (data) {
+    socket.on('playermoving', (data) => {
 
         for (let i = 0; i < tankController.tankView.tanks.length; ++i) {
             if (tankController.tankView.tanks[i].y == data.y) {
