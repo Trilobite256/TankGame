@@ -68,7 +68,7 @@ TankView.prototype = {
                     this.tankController.tankBulletCollision(this.tanks[i].bullets[j], this.tanks[k])) {
                     
                         this.tanks[i].bullets.splice(j, 1);
-                        this.tanks[k].lives--;
+                        this.tanks[k].lives = this.tanks[k].lives - 1;
 
                 }
             }

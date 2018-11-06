@@ -62,6 +62,15 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('mousemoving', data);
   });
 
+  socket.on('lives', (data) => {
+    tanks[0].lives = data[0].lives;
+    if (data[1]) {
+      tanks[1].lives = data[1].lives;
+    }
+    socket.emit('lives', tanks);
+    socket.broadcast.emit('lives', tanks);
+  }); 
+
   socket.on('clicked', (data) => {
     socket.emit('mouseclicked', socket.tank);
     socket.broadcast.emit('mouseclicked', socket.tank);

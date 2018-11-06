@@ -43,7 +43,9 @@ $(function () {
         if (tankController.tankView.keys[39]) {
             socket.emit('pressed', 39, window.innerWidth);
         }
-
+        if (tankController.tankView.tanks.length != 0) {
+            socket.emit('lives', tankController.tankView.tanks);
+        }
         tankController.tankView.draw();
         requestAnimationFrame(animate);
     }
@@ -72,7 +74,7 @@ $(function () {
     socket.on('lives', function (data) {
         $('#playerLives1').html("" + data[0].lives);
         if (data[1]) {
-            $('#playerName3').html("" + data[i]);
+            $('#playerLives2').html("" + data[1].lives);
         }
     }); 
 
