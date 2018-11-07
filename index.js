@@ -16,14 +16,13 @@ app.get('/', function (req, res) {
 
 io.on('connection', function (socket) {
 
-  // io.emit("playerjoined", tanks);
+  io.emit("playerjoined", tanks);
 
   socket.on('player name', (data, callback) => {
     if (playernames.length >= 2) {
       callback(false);
     } else {
       callback(true);
-      io.emit("playerjoined", tanks);
       socket.playername = data;
       playernames.push(socket.playername);
       io.sockets.emit("playernames", playernames);
@@ -68,7 +67,6 @@ io.on('connection', function (socket) {
       tanks[0].lives = data[0].lives;
     }
     if (data[1]) {
-      console.log(data[1]);
       tanks[1].lives = data[1].lives;
     }
     socket.emit('lives', tanks);

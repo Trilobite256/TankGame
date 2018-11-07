@@ -65,11 +65,9 @@ $(function () {
     });
 
     socket.on('playernames', (data) => {
-        if (data[0]) {
-            $('#playerName1').html("" + data[0]);
-        }
+        $('#player1heading').html("Player 1: " + data[0]);
         if (data[1]) {
-            $('#playerName2').html("" + data[1]);
+            $('#player2heading').html("Player 2: " + data[1]);
         }
     });
 
