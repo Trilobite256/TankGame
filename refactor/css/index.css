@@ -1,18 +1,4 @@
-#homepage {
-    border: 1px solid black;
-    height: 100vh; 
-    width: 100vw;
-    margin: 0px;
-}
-
-#title {
+#main {
     text-align: center;
-}
-
-#rooms {
-    height:90%;
-    width: 80%;
-    border: 1px solid #ccc;
     margin: 0 auto;
-    overflow: auto;
 }

@@ -9,6 +9,6 @@ IndexView.prototype = {
 
     init: () => {
         
-    }
+    },
 
 }
