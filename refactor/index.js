@@ -6,6 +6,8 @@ const io = require('socket.io')(http);
 // Import files
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/view', express.static(__dirname + '/view'));
+app.use('/controller', express.static(__dirname + '/controller'));
+app.use('/driver', express.static(__dirname + '/driver'));
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');

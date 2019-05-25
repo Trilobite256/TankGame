@@ -14,7 +14,9 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-    <script src="view/TankView.js"></script>
+    <script src="controller/EventHandler.js"></script>
+    <script src="view/IndexView.js"></script>
+    <script src="driver/app.js"></script>
 </head>
 
 <body>
@@ -22,13 +24,10 @@
         <h1 id="title">Tank Game</h1>
         <div id="roomCode" class="input-group mb-3">
             <!-- Text input for room code -->
-            <input type="text" class="form-control" placeholder="Search">
+            <input type="text" class="form-control" placeholder="Enter Room Code">
             <div class="input-group-append">
-                <button class="btn btn-success" type="submit">Join</button>
+                <button id="joinRoom" class="btn btn-success" type="submit">Join Room</button>
             </div>
-        </div>
-        <div id="refreshBtn">
-            <!-- Refresh button to reset the rooms -->
         </div>
         <div id="createRoomBtn">
             <!-- Button to create the room -->
